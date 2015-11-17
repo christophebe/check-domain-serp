@@ -18,7 +18,7 @@ function searchDomains(searchOptions, endCallback) {
           },
           function(domains, callback) {
               if (searchOptions.majecticKey) {
-                domains = _.sortBy(domains, function(domain){ return -domain.majestic.TrustFlow; });
+                domains = _.sortBy(_.compact(domains), function(domain){ return -domain.majestic.TrustFlow; });
               }
 
               callback(null, domains);
@@ -41,7 +41,7 @@ function getDomains(searchOptions, urls, endCallback) {
             callback();
           }
           else {
-            checkedDomains.push(domain); 
+            checkedDomains.push(domain);
             getDomain(searchOptions, url, callback);
           }
 
