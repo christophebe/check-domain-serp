@@ -6,7 +6,7 @@ This module is using the Majestic API & the whoisxml API.
 # Installation
 
 ``` bash
-$ npm install serp
+$ npm install check-domain-serp
 ```
 
 # Exemple
@@ -33,7 +33,7 @@ serp.searchDomains(options, function(error, domains){
 
 ```
 
-For google.com, the param host is not necessary.
+The options are the same as the module :
 qs can contains the usual Google search parameters : https://moz.com/ugc/the-ultimate-guide-to-the-google-search-parameters.
 
 The options object can also contain all request options like proxy : https://github.com/request/request
