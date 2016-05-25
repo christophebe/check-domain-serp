@@ -62,8 +62,10 @@ function getDomainList(searchOptions, urls, callback) {
 
       // Sort the list in function of the Majestic TrustFlow
       function(domains, callback) {
+          domains = _.compact(domains);
+          
           if (searchOptions.majecticKey && searchOptions.sortOnTrustFlow) {
-            domains = _.sortBy(_.compact(domains), function(domain){ return -domain.majestic.TrustFlow; });
+            domains = _.sortBy(domains, function(domain){ return -domain.majestic.TrustFlow; });
           }
 
           callback(null, domains);
@@ -71,7 +73,7 @@ function getDomainList(searchOptions, urls, callback) {
 
     ], function(error, domains) {
         if (error) {
-          logError("Error during getting infos for domains", searchOptions);
+          logError("Error during getting infos for domains", searchOptions, error);
         }
         callback(error, domains);
     });
@@ -120,9 +122,9 @@ function getDomainInfo(searchOptions, url, callback) {
         return callback();
     }
 
-    logInfo("Getting domain info", options);
     var options = _.clone(searchOptions);
     options.domain = URI.domain(url);
+    logInfo("Getting domain info", options.domain);
 
     checkDomain(options, function(error, result) {
           callback(error, result);
