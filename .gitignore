@@ -1,3 +1,4 @@
 logs
 node_modules
 proxies.txt
+test/test.js
