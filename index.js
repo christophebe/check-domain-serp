@@ -63,7 +63,7 @@ function getDomainList(searchOptions, urls, callback) {
       // Sort the list in function of the Majestic TrustFlow
       function(domains, callback) {
           domains = _.compact(domains);
-          
+
           if (searchOptions.majecticKey && searchOptions.sortOnTrustFlow) {
             domains = _.sortBy(domains, function(domain){ return -domain.majestic.TrustFlow; });
           }
@@ -90,8 +90,8 @@ function getDomainList(searchOptions, urls, callback) {
 function getDomainInfos(searchOptions, urls, endCallback) {
     var checkedDomains = [];
 
-    async.map(urls, function(url, callback) {
-          var domain = URI.domain(url);
+    async.map(urls, function(urldata, callback) {
+          var domain = URI.domain(urldata.url);
 
           // Don't add twice the same domain
           if (checkedDomains.indexOf(domain) > -1) {
@@ -99,7 +99,7 @@ function getDomainInfos(searchOptions, urls, endCallback) {
           }
           else {
             checkedDomains.push(domain);
-            getDomainInfo(searchOptions, url, callback);
+            getDomainInfo(searchOptions, urldata, callback);
           }
 
     },
@@ -114,19 +114,22 @@ function getDomainInfos(searchOptions, urls, endCallback) {
  * @param the options use to make the google search and to get info on the domains
  * @callback the url
  */
-function getDomainInfo(searchOptions, url, callback) {
+function getDomainInfo(searchOptions, urldata, callback) {
 
     // Don't return an error if the url is invalid
     // otherwise it will stop the complete check
-    if (! URI.isValidDomain(url)) {
+    if (! URI.isValidDomain(urldata.url)) {
         return callback();
     }
 
     var options = _.clone(searchOptions);
-    options.domain = URI.domain(url);
+    options.domain = URI.domain(urldata.url);
     logInfo("Getting domain info", options.domain);
 
     checkDomain(options, function(error, result) {
+          result.url = urldata.url;
+          result.title = urldata.title; 
+
           callback(error, result);
     });
 
